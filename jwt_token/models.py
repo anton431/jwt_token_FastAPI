@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Float, Integer, String, DATE
+from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -11,6 +11,6 @@ class UserDB(Base):
     username = Column(String)
     hashed_password = Column(String)
     salary = Column(Integer)
-    promotion = Column(DATE)
+    promotion = Column(Date)
 
 
