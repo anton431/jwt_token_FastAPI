@@ -8,8 +8,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
 from schemas import User, TokenData, UserCreate
-from settings import SECRET_KEY, ALGORITHM
-from database import SessionLocal
+from settings import SECRET_KEY, ALGORITHM, SessionLocal
 import models
 
 

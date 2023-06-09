@@ -3,12 +3,11 @@ from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from settings import ACCESS_TOKEN_EXPIRE_MINUTES
 from sqlalchemy.orm import Session
 from schemas import Token, User
 import uvicorn
 
-from database import engine
+from settings import engine, ACCESS_TOKEN_EXPIRE_MINUTES
 import schemas
 import models
 import crud
