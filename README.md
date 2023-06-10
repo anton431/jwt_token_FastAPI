@@ -27,7 +27,7 @@ Optional requirements:<br>
 ## Private information
 
 >Hidden information in the file .env:<br>
->![img.png](img/img.png)
+>![img.png](img/img.png)<br>
 > You can generate a SECRET KEY yourself or you can generate it from a site like <a href=https://www.grc.com/passwords.htm>this</a>.
 
 ## Launch
@@ -40,7 +40,7 @@ git clone https://github.com/anton431/jwt_token_FastAPI.git
 ```
 pip install -r requirements.txt
 ```
-3. Set the password for your database in docker-compose in the POSTGRES_PASSWORD variable:
+3. Set the password your database in docker-compose in the POSTGRES_PASSWORD variable:
 >![img.png](img/img1.png)
 4. Run the commands:
 ```
