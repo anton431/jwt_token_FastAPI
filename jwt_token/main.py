@@ -4,7 +4,6 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from schemas import Token, User
 import uvicorn
 
 from settings import engine, ACCESS_TOKEN_EXPIRE_MINUTES
@@ -21,11 +20,15 @@ if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=8000)
 
 
-@app.post("/token", response_model=Token)
+@app.post("/token", response_model=schemas.Token)
 async def login_for_access_token(
         form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
         db: Session = Depends(crud.get_db)):
-
+    """
+    Get a custom token from the database using username from
+    the form field. If there is no such user, return the error
+    message "incorrect username or password".
+    """
     user = crud.authenticate_user(db=db, username=form_data.username,
                                   password=form_data.password)
     if not user:
@@ -42,10 +45,13 @@ async def login_for_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/users/me/", response_model=User)
+@app.get("/users/me/", response_model=schemas.User)
 async def read_users_me(
-        current_user: Annotated[User, Depends(crud.get_current_active_user)]):
-
+        current_user: Annotated[schemas.User,
+                                Depends(crud.get_current_user)]):
+    """
+    Get the data of an authorized user
+    """
     return current_user
 
 
@@ -53,7 +59,9 @@ async def read_users_me(
 async def create_user(
         user: schemas.UserCreate,
         db: Session = Depends(crud.get_db)):
-
+    """
+    Creating a user by name and password
+    """
     db_user = crud.get_user(db=db, username=user.username)
     if db_user:
         raise HTTPException(status_code=400,detail="User already registered")

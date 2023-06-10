@@ -25,14 +25,23 @@ def get_db():
 
 
 def verify_password(plain_password, hashed_password):
+    """
+    Check whether the received password matches the saved hash.
+    """
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password):
+    """
+    Hash the password coming from the user.
+    """
     return pwd_context.hash(password)
 
 
 def get_user(db: Session, username: str):
+    """
+    Get the current user.
+    """
     user = db.query(models.UserDB).filter(
         models.UserDB.username == username).first()
     if user:
@@ -40,6 +49,9 @@ def get_user(db: Session, username: str):
 
 
 def create_user(db: Session, user: UserCreate):
+    """
+    Create a new user by name and password.
+    """
     fake_hashed_password = get_password_hash(user.password)
     db_user = models.UserDB(username=user.username,
                             hashed_password=fake_hashed_password)
@@ -51,6 +63,9 @@ def create_user(db: Session, user: UserCreate):
 
 
 def authenticate_user(db: Session, username: str, password: str):
+    """
+    Authenticate and return the user.
+    """
     user = get_user(db, username)
     if not user:
         return False
@@ -62,6 +77,9 @@ def authenticate_user(db: Session, username: str, password: str):
 
 def create_access_token(data: dict,
                         expires_delta: Union[timedelta, None] = None):
+    """
+    Creating a token with an expiration time of 5 minutes.
+    """
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -76,11 +94,17 @@ def create_access_token(data: dict,
 async def get_current_user(
         token: Annotated[str, Depends(oauth2_scheme)],
         db: Session = Depends(get_db)):
+    """
+    Get the JWT tokens, Decrypt the received token, verify it,
+    and return the current user. If the token is invalid, return
+    an HTTP error immediately.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
@@ -94,8 +118,3 @@ async def get_current_user(
         raise credentials_exception
 
     return user
-
-
-async def get_current_active_user(
-        current_user: Annotated[User, Depends(get_current_user)]):
-    return current_user
