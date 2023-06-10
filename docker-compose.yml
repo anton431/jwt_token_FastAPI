@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres15
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_PASSWORD: 777jon777
+  web:
+    build: .
+    command:  bash -c "cd jwt_token && 
+              uvicorn main:app --host 0.0.0.0 --reload "
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/usr/src/jwt_token_FastAPI/
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: demo-pgadmin-3
+    depends_on:
+      - postgres
+    ports:
+      - "5051:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: root
+    restart: always
+
+volumes:
+  db:
+    driver: local
