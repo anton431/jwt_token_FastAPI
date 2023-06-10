@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-from schemas import User, TokenData, UserCreate
+from schemas import TokenData, UserCreate
 from settings import SECRET_KEY, ALGORITHM, SessionLocal
 import models
 

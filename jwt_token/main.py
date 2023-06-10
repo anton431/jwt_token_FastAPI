@@ -29,7 +29,8 @@ async def login_for_access_token(
     the form field. If there is no such user, return the error
     message "incorrect username or password".
     """
-    user = crud.authenticate_user(db=db, username=form_data.username,
+    user = crud.authenticate_user(db=db,
+                                  username=form_data.username,
                                   password=form_data.password)
     if not user:
         raise HTTPException(
