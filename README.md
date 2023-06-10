@@ -65,3 +65,9 @@ root
 7. You can set the salary and the date of the increase to users:
 ![img_1.png](img/img6.png)
 8. You can make <a href=http://127.0.0.1:8000/docs>requests</a>.
+> Create user
+>![img.png](img/img7.png)
+> ![img_1.png](img/img8.png)<br>
+> Authorization and receipt of user data
+> ![img_2.png](img/img9.png)
+> ![img_3.png](img/img10.png)
